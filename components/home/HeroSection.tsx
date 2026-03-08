@@ -15,7 +15,7 @@ export function HeroSection() {
       <div className="absolute inset-0">
         <Image
           src={site.images.hero}
-          alt="Pharmacist in a professional laboratory setting"
+          alt="Doctor in a professional laboratory setting"
           fill
           priority
           sizes="100vw"
