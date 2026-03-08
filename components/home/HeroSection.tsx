@@ -14,8 +14,8 @@ export function HeroSection() {
     <section className="relative min-h-[92vh] overflow-hidden bg-primary text-surface">
       <div className="absolute inset-0">
         <Image
-          src="/images/hero777.jpg"
-          alt="Doctor in a professional laboratory setting"
+          src={site.images.hero}
+          alt="Pharmacist in a professional laboratory setting"
           fill
           priority
           sizes="100vw"
