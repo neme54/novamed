@@ -1,0 +1,424 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  staffId       String?   @unique
+  pin           String?
+  role          Role      @default(SALES_STAFF)
+  department    String?
+  phone         String?
+  avatar        String?
+  isActive      Boolean   @default(true)
+  lastLogin     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions         Session[]
+  auditLogs        AuditLog[]
+  bookingsHandled  Booking[]       @relation("PharmacistBookings")
+  articlesWritten  NewsArticle[]
+}
+
+enum Role {
+  SUPER_ADMIN
+  PHARMACIST
+  REGULATORY_OFFICER
+  HR_MANAGER
+  CONTENT_MANAGER
+  FINANCE
+  SALES_STAFF
+  WAREHOUSE_STAFF
+  FIELD_SALES_REP
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Drug {
+  id                   String      @id @default(cuid())
+  slug                 String      @unique
+  brandName            String
+  genericName          String
+  therapeuticCategory  String
+  subCategory          String?
+  type                 DrugType
+  dosageForm           DosageForm
+  strength             String
+  packSize             String
+  nafdacNumber         String      @unique
+  registrationDate     DateTime?
+  registrationExpiry   DateTime?
+  manufacturer         String     @default("NovaMed Pharmaceuticals Ltd.")
+  countryOfManufacture String    @default("Nigeria")
+
+  indications        String[]
+  contraindications  String[]
+  sideEffectsCommon  String[]
+  sideEffectsSerious  String[]
+  sideEffectsRare     String[]
+  drugInteractions    String[]
+  dosageAdults        String?
+  dosageChildren      String?
+  storageConditions   String?
+  shelfLife           String?
+  prescriptionRequired Boolean   @default(false)
+  controlledSubstance Boolean   @default(false)
+  pregnancyCategory   String?
+  breastfeedingSafe   Boolean?
+
+  recommendedRetailPrice Decimal @db.Decimal(10, 2)
+  costPrice              Decimal? @db.Decimal(10, 2)
+  distributorPrice       Decimal? @db.Decimal(10, 2)
+  currency               String   @default("NGN")
+
+  availableInNigeria Boolean @default(true)
+  exportMarkets      String[]
+  stockLevel         Int     @default(0)
+  reorderLevel       Int     @default(100)
+
+  image           String?
+  thumbnailImage   String?
+  patientLeafletUrl String?
+  spcUrl           String?
+  msdsUrl          String?
+
+  featured Boolean  @default(false)
+  status   DrugStatus @default(ACTIVE)
+  tags     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderItems     OrderItem[]
+  priceHistory   DrugPriceHistory[]
+  adverseEvents  AdverseEvent[]
+}
+
+enum DrugType {
+  PRESCRIPTION
+  OTC
+  CONTROLLED
+  PAEDIATRIC
+}
+
+enum DosageForm {
+  TABLET
+  CAPSULE
+  SYRUP
+  INJECTION
+  CREAM
+  DROPS
+  INHALER
+  SUPPOSITORY
+  POWDER
+  SACHET
+  PATCH
+}
+
+enum DrugStatus {
+  ACTIVE
+  DISCONTINUED
+  PENDING_APPROVAL
+  RECALLED
+}
+
+model DrugPriceHistory {
+  id        String   @id @default(cuid())
+  drugId    String
+  oldPrice  Decimal  @db.Decimal(10, 2)
+  newPrice  Decimal  @db.Decimal(10, 2)
+  changedBy String
+  reason    String?
+  changedAt DateTime @default(now())
+  drug      Drug     @relation(fields: [drugId], references: [id])
+}
+
+model Distributor {
+  id                String           @id @default(cuid())
+  companyName       String
+  contactPerson     String
+  email             String           @unique
+  password          String
+  phone             String
+  type              DistributorType
+  territory         String[]
+  address           String
+  state             String
+  country           String           @default("Nigeria")
+  rcNumber          String?
+  creditLimit       Decimal?         @db.Decimal(12, 2)
+  creditTermDays    Int              @default(30)
+  outstandingBalance Decimal        @default(0) @db.Decimal(12, 2)
+  isActive          Boolean          @default(true)
+  isVerified        Boolean          @default(false)
+  specialPricing    Json?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  orders   Order[]
+  invoices Invoice[]
+}
+
+enum DistributorType {
+  DISTRIBUTOR
+  HOSPITAL
+  CLINIC
+  PHARMACY_CHAIN
+  GOVERNMENT
+  NGO
+}
+
+model Order {
+  id               String      @id @default(cuid())
+  orderNumber      String      @unique
+  distributorId    String
+  status           OrderStatus @default(PENDING)
+  subtotal         Decimal     @db.Decimal(12, 2)
+  tax              Decimal     @default(0) @db.Decimal(12, 2)
+  total            Decimal     @db.Decimal(12, 2)
+  notes            String?
+  deliveryAddress  String?
+  expectedDelivery DateTime?
+  deliveredAt      DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  distributor   Distributor @relation(fields: [distributorId], references: [id])
+  items         OrderItem[]
+  invoice       Invoice?
+  statusHistory OrderStatusHistory[]
+}
+
+model OrderItem {
+  id       String  @id @default(cuid())
+  orderId  String
+  drugId   String
+  quantity Int
+  unitPrice Decimal @db.Decimal(10, 2)
+  total    Decimal  @db.Decimal(10, 2)
+  order    Order   @relation(fields: [orderId], references: [id])
+  drug     Drug    @relation(fields: [drugId], references: [id])
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  status    OrderStatus
+  note      String?
+  updatedBy String?
+  updatedAt DateTime    @default(now())
+  order     Order       @relation(fields: [orderId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  DISPATCHED
+  DELIVERED
+  CANCELLED
+  ON_HOLD
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  invoiceNo     String   @unique
+  orderId       String   @unique
+  distributorId String
+  amount        Decimal  @db.Decimal(12, 2)
+  dueDate       DateTime
+  paidAt        DateTime?
+  pdfUrl        String?
+  createdAt     DateTime @default(now())
+  order         Order    @relation(fields: [orderId], references: [id])
+  distributor   Distributor @relation(fields: [distributorId], references: [id])
+}
+
+model Booking {
+  id               String          @id @default(cuid())
+  bookingRef       String          @unique
+  consultationType ConsultType
+  format           ConsultFormat
+  scheduledDate    DateTime
+  scheduledTime    String
+  patientName      String
+  patientPhone     String
+  patientEmail     String?
+  patientAge       Int?
+  patientGender    String?
+  patientState     String
+  drugName         String?
+  notes            String?
+  howHeard         String?
+  status           BookingStatus   @default(PENDING)
+  pharmacistId     String?
+  pharmacistNotes  String?
+  completedAt      DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  pharmacist User? @relation("PharmacistBookings", fields: [pharmacistId], references: [id])
+}
+
+enum ConsultType {
+  DRUG_INFORMATION
+  PREGNANCY_SAFETY
+  PAEDIATRIC_ADVICE
+  DRUG_INTERACTION
+  CHRONIC_DISEASE
+  PRESCRIPTION_REVIEW
+  GENERAL
+}
+
+enum ConsultFormat {
+  PHONE
+  VIDEO
+  IN_PERSON
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+model NewsArticle {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  title       String
+  category    NewsCategory
+  excerpt     String
+  content     String
+  image       String?
+  authorId    String
+  publishedAt DateTime?
+  isPublished Boolean     @default(false)
+  tags        String[]
+  views       Int         @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+}
+
+enum NewsCategory {
+  PRESS_RELEASE
+  INDUSTRY_NEWS
+  HEALTH_TIPS
+  AWARDS
+  EVENTS
+  REGULATORY
+}
+
+model Job {
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  title            String
+  department       String
+  location         String
+  type             JobType
+  level            JobLevel
+  description      String
+  responsibilities String[]
+  requirements     String[]
+  deadline         DateTime
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  applications Application[]
+}
+
+model Application {
+  id          String   @id @default(cuid())
+  jobId       String
+  fullName    String
+  email       String
+  phone       String
+  linkedinUrl String?
+  experience  Int
+  coverLetter String
+  cvUrl       String?
+  status      ApplicationStatus @default(RECEIVED)
+  createdAt   DateTime @default(now())
+
+  job Job @relation(fields: [jobId], references: [id])
+}
+
+enum JobType {
+  FULL_TIME
+  CONTRACT
+  INTERNSHIP
+}
+
+enum JobLevel {
+  ENTRY
+  MID
+  SENIOR
+  MANAGER
+  DIRECTOR
+}
+
+enum ApplicationStatus {
+  RECEIVED
+  REVIEWING
+  SHORTLISTED
+  INTERVIEWING
+  OFFERED
+  REJECTED
+}
+
+model AdverseEvent {
+  id           String   @id @default(cuid())
+  drugId       String?
+  drugName     String
+  reporterType String
+  reporterName String?
+  reporterEmail String?
+  reporterPhone String?
+  eventDate    DateTime?
+  description  String
+  severity     String
+  outcome      String?
+  actionTaken  String?
+  status       String   @default("Open")
+  assignedTo   String?
+  nafdacRef    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  drug Drug? @relation(fields: [drugId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  entity    String
+  entityId  String
+  oldValue  Json?
+  newValue  Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}

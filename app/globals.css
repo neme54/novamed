@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Brand — Section 1 (RGB for Tailwind opacity) */
+  --primary: 11 61 46;           /* #0B3D2E deep forest */
+  --primary-light: 26 92 69;     /* #1A5C45 hover/gradients */
+  --accent: 201 153 31;          /* #C9991F gold */
+  --accent-light: 232 184 75;    /* #E8B84B gold hover */
+  --surface: 247 244 239;        /* #F7F4EF warm off-white */
+  --surface-dark: 238 234 227;   /* #EEEAE3 cards/rows */
+  --dark: 15 26 20;              /* #0F1A14 near-black green undertone */
+  --charcoal: 30 42 35;          /* #1E2A23 secondary dark */
+  --muted: 107 123 112;          /* #6B7B70 captions */
+  --success: 45 122 79;          /* #2D7A4F */
+  --warning: 201 153 31;         /* same as gold */
+  --danger: 185 28 28;           /* #B91C1C */
+  --highlight: 227 242 236;      /* #E3F2EC light green card tint */
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: rgb(var(--surface));
+  color: rgb(var(--dark));
+  font-family: var(--font-sans), "Plus Jakarta Sans", system-ui, sans-serif;
+  line-height: 1.7;
+}
+
+/* Display headlines: tight line-height */
+.font-display {
+  line-height: 1.1;
+}
+
+/* Max line length for body paragraphs */
+.prose p {
+  max-width: 68ch;
+}
+
+/* Subtle “grain” texture for hero sections */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+  background-size: 260px 260px;
+}
+
+@layer utilities {
+  .focus-ring {
+    @apply outline-none ring-2 ring-accent/70 ring-offset-2 ring-offset-surface;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.whatsapp-pulse {
+  animation: pulse-ring 1.5s ease-out infinite;
+}
