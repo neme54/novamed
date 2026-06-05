@@ -5,13 +5,18 @@ import { DrugDetail } from "@/components/drugs/DrugDetail";
 import { getDrugBySlug, getDrugs } from "@/lib/data/drugs";
 import { pages } from "@/lib/data/pages";
 import { site } from "@/lib/data/site";
+import { getPublicDrugBySlug, getPublicDrugs } from "@/lib/data/db/drugs";
 
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const drug = await getDrugBySlug(params.slug);
+  // Prefer DB; fall back to static data
+  let drug = await getPublicDrugBySlug(params.slug);
+  if (!drug) {
+    drug = await getDrugBySlug(params.slug);
+  }
   if (!drug) return { title: site.metadata.defaultTitle };
   return {
     title: `${drug.brandName} | ${pages.drugs.title}`,
@@ -29,10 +34,17 @@ export default async function DrugPage({
 }: {
   params: { slug: string };
 }) {
-  const drug = await getDrugBySlug(params.slug);
+  // Prefer DB; fall back to static data
+  let drug = await getPublicDrugBySlug(params.slug);
+  if (!drug) {
+    drug = await getDrugBySlug(params.slug);
+  }
   if (!drug) notFound();
 
-  const all = await getDrugs();
+  let all = await getPublicDrugs().catch(() => null);
+  if (!all) {
+    all = await getDrugs();
+  }
   const related = all.filter(
     (d) => d.slug !== drug.slug && d.therapeuticCategory === drug.therapeuticCategory,
   );

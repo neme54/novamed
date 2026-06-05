@@ -8,6 +8,7 @@ import { pages } from "@/lib/data/pages";
 import { getDrugCategories, getDrugs } from "@/lib/data/drugs";
 import type { Drug } from "@/lib/types/drug";
 import { site } from "@/lib/data/site";
+import { getPublicDrugs } from "@/lib/data/db/drugs";
 
 export const metadata: Metadata = {
   title: `${pages.drugs.title} | ${site.name}`,
@@ -29,7 +30,15 @@ export default async function DrugsPage({
 }: {
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
-  const all = await getDrugs();
+  // Prefer DB (Prisma). Fallback to static data if DB is not available.
+  let all: Drug[];
+  try {
+    const fromDb = await getPublicDrugs();
+    all = fromDb as unknown as Drug[];
+  } catch (e) {
+    console.error("Falling back to static drugs data", e);
+    all = await getDrugs();
+  }
   const categories = await getDrugCategories();
 
   const q = typeof searchParams?.q === "string" ? searchParams.q : "";
