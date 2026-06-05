@@ -1,69 +1,64 @@
 import type { BoardMember, TeamMember } from "@/lib/types/team";
 
+/** Leadership portraits — Pexels & Pixabay (saved under /public/images/team). */
+const teamPhoto = (file: string) => `/images/team/${file}`;
+
 export const leadershipTeam: TeamMember[] = [
   {
     id: "ceo",
     name: "Dr. Teniola Adeyemi",
     title: "Chief Executive Officer",
-    bio: "A pharmacist and healthcare leader focused on expanding access to quality-assured medicines across Africa through disciplined manufacturing and ethical partnerships.",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Pharmacist and Lagos-born healthcare leader expanding access to quality-assured medicines across Nigeria and West Africa through disciplined manufacturing and ethical partnerships.",
+    image: teamPhoto("teniola-adeyemi.jpg"),
   },
   {
     id: "coo",
     name: "Amaka Nwosu",
     title: "Chief Operating Officer",
-    bio: "Operations executive with a track record in supply resilience, plant performance, and workforce development across multi-site manufacturing.",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Enugu-raised operations executive with a track record in supply resilience, plant performance, and workforce development across NovaMed’s Lagos and Ogun sites.",
+    image: teamPhoto("amaka-nwosu.jpg"),
   },
   {
     id: "cmo",
     name: "Kola Okafor",
     title: "Chief Medical Officer",
-    bio: "Clinical strategy leader supporting responsible product use, pharmacovigilance, and medical education aligned with public health priorities.",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Ibadan-trained physician supporting responsible product use, pharmacovigilance, and medical education aligned with NAFDAC guidance and public-health priorities.",
+    image: teamPhoto("kola-okafor.jpg"),
   },
   {
     id: "cfo",
     name: "Zainab Bello",
     title: "Chief Financial Officer",
-    bio: "Finance leader focused on transparent reporting, disciplined investment, and long-term value creation for stakeholders.",
-    image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Kano-born finance leader focused on transparent reporting, disciplined capital allocation, and long-term value creation for Nigerian stakeholders and export partners.",
+    image: teamPhoto("zainab-bello.jpg"),
   },
   {
     id: "rd",
     name: "Dr. Ifeanyi Nnamdi",
     title: "Director, Research & Development",
-    bio: "Formulation scientist building local innovation capacity, stability readiness for African climates, and technology transfer partnerships.",
-    image:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Formulation scientist from Anambra building local innovation capacity, stability programmes for tropical climates, and technology-transfer partnerships across Africa.",
+    image: teamPhoto("ifeanyi-nnamdi.jpg"),
   },
   {
     id: "mfg",
     name: "Chidinma Eze",
     title: "Director, Manufacturing",
-    bio: "Manufacturing excellence leader with deep experience in oral solids and continuous improvement programmes across regulated environments.",
-    image:
-      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Manufacturing excellence lead with deep experience in oral solids and continuous-improvement programmes across NAFDAC-regulated environments in Nigeria.",
+    image: teamPhoto("chidinma-eze.jpg"),
   },
   {
     id: "reg",
     name: "Adewale Hassan",
     title: "Director, Regulatory & Compliance",
-    bio: "Regulatory specialist ensuring robust licensing, inspection readiness, and lifecycle stewardship aligned with NAFDAC and international expectations.",
-    image:
-      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Abuja-based regulatory specialist ensuring robust licensing, inspection readiness, and lifecycle stewardship aligned with NAFDAC and WHO expectations.",
+    image: teamPhoto("adewale-hassan.jpg"),
   },
   {
     id: "sales",
     name: "Uche Nwankwo",
     title: "Director, Sales & Market Access",
-    bio: "Commercial leader building ethical, data-informed go-to-market strategies that support availability and appropriate use.",
-    image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&h=400&q=80",
+    bio: "Commercial leader from Port Harcourt building ethical, data-informed go-to-market strategies that improve availability and appropriate use nationwide.",
+    image: teamPhoto("uche-nwankwo.jpg"),
   },
 ];
 
@@ -73,28 +68,28 @@ export const boardOfDirectors: BoardMember[] = [
     name: "Engr. Amina Yusuf",
     role: "Board Chair",
     background:
-      "Corporate governance leader with experience in industrial manufacturing, risk oversight, and strategic growth.",
+      "Kaduna-born corporate governance leader with experience in industrial manufacturing, risk oversight, and strategic growth across Nigeria.",
   },
   {
     id: "ind-1",
     name: "Prof. Chukwuemeka Obi",
     role: "Independent Non-Executive Director",
     background:
-      "Academic and public health adviser with expertise in medicine policy, quality systems, and patient safety.",
+      "Nigerian academic and public-health adviser with expertise in medicine policy, quality systems, and patient safety.",
   },
   {
     id: "ind-2",
     name: "Mrs. Laila Sanusi",
     role: "Independent Non-Executive Director",
     background:
-      "Finance and audit specialist with strong oversight in reporting integrity and compliance controls.",
+      "Lagos finance and audit specialist with strong oversight in reporting integrity and compliance controls.",
   },
   {
     id: "exec",
     name: "Dr. Teniola Adeyemi",
     role: "Executive Director",
     background:
-      "Chief Executive Officer providing operational leadership and long-term strategy execution.",
+      "Chief Executive Officer providing operational leadership and long-term strategy execution for NovaMed in Nigeria.",
   },
 ];
 
@@ -118,4 +113,3 @@ export async function getBoard(): Promise<BoardMember[]> {
 export async function getMilestones() {
   return milestones;
 }
-

@@ -77,7 +77,7 @@ export const pages = {
       board: "Board of Directors",
     },
     leadershipDescription:
-      "Experienced leaders across science, operations, and compliance.",
+      "Nigerian leaders across science, operations, and compliance—based in Lagos, Abuja, and our manufacturing corridor.",
     mvvLabels: {
       missionEyebrow: "Mission",
       missionTitle: "Our mission",
