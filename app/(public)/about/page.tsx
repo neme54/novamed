@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   description: pages.about.description,
 };
 
+/** Avoid stale leadership portraits from long-lived static cache after deploys. */
+export const revalidate = 0;
+
 export default async function AboutPage() {
   const leadership = await getLeadershipTeam();
   const board = await getBoard();

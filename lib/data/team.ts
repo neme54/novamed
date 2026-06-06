@@ -1,8 +1,7 @@
 import type { BoardMember, TeamMember } from "@/lib/types/team";
 
-/** Verified Pexels portraits (Black/African professionals). Crop params keep headshots consistent. */
-const px = (id: number) =>
-  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop`;
+/** Local portraits (Pexels → public/images/team). Bump ?v= when replacing files. */
+const teamPhoto = (file: string) => `/images/team/${file}`;
 
 export const leadershipTeam: TeamMember[] = [
   {
@@ -10,56 +9,56 @@ export const leadershipTeam: TeamMember[] = [
     name: "Dr. Teniola Adeyemi",
     title: "Chief Executive Officer",
     bio: "Pharmacist and Lagos-born healthcare leader expanding access to quality-assured medicines across Nigeria and West Africa through disciplined manufacturing and ethical partnerships.",
-    image: px(1181691),
+    image: teamPhoto("teniola-adeyemi.jpg"),
   },
   {
     id: "coo",
     name: "Amaka Nwosu",
     title: "Chief Operating Officer",
     bio: "Enugu-raised operations executive with a track record in supply resilience, plant performance, and workforce development across NovaMed’s Lagos and Ogun sites.",
-    image: px(1181514),
+    image: teamPhoto("amaka-nwosu.jpg"),
   },
   {
     id: "cmo",
     name: "Kola Okafor",
     title: "Chief Medical Officer",
     bio: "Ibadan-trained physician supporting responsible product use, pharmacovigilance, and medical education aligned with NAFDAC guidance and public-health priorities.",
-    image: px(29387556),
+    image: teamPhoto("kola-okafor.jpg"),
   },
   {
     id: "cfo",
     name: "Zainab Bello",
     title: "Chief Financial Officer",
     bio: "Kano-born finance leader focused on transparent reporting, disciplined capital allocation, and long-term value creation for Nigerian stakeholders and export partners.",
-    image: px(1181519),
+    image: teamPhoto("zainab-bello.jpg"),
   },
   {
     id: "rd",
     name: "Dr. Ifeanyi Nnamdi",
     title: "Director, Research & Development",
     bio: "Formulation scientist from Anambra building local innovation capacity, stability programmes for tropical climates, and technology-transfer partnerships across Africa.",
-    image: px(5327656),
+    image: teamPhoto("ifeanyi-nnamdi.jpg"),
   },
   {
     id: "mfg",
     name: "Chidinma Eze",
     title: "Director, Manufacturing",
     bio: "Manufacturing excellence lead with deep experience in oral solids and continuous-improvement programmes across NAFDAC-regulated environments in Nigeria.",
-    image: px(1181520),
+    image: teamPhoto("chidinma-eze.jpg"),
   },
   {
     id: "reg",
     name: "Adewale Hassan",
     title: "Director, Regulatory & Compliance",
     bio: "Abuja-based regulatory specialist ensuring robust licensing, inspection readiness, and lifecycle stewardship aligned with NAFDAC and WHO expectations.",
-    image: px(1181391),
+    image: teamPhoto("adewale-hassan.jpg"),
   },
   {
     id: "sales",
     name: "Uche Nwankwo",
     title: "Director, Sales & Market Access",
     bio: "Commercial leader from Port Harcourt building ethical, data-informed go-to-market strategies that improve availability and appropriate use nationwide.",
-    image: px(1681010),
+    image: teamPhoto("uche-nwankwo.jpg"),
   },
 ];
 
